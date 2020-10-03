@@ -15,6 +15,10 @@
 		D5778876252498D900CE60CD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5778874252498D900CE60CD /* LaunchScreen.storyboard */; };
 		D5778881252498D900CE60CD /* ComposeMemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5778880252498D900CE60CD /* ComposeMemoTests.swift */; };
 		D577888C252498D900CE60CD /* ComposeMemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577888B252498D900CE60CD /* ComposeMemoUITests.swift */; };
+		D598D8C02525A5C900A257ED /* MemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D598D8BF2525A5C900A257ED /* MemoViewController.swift */; };
+		D598D8C22525A5DB00A257ED /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D598D8C12525A5DB00A257ED /* AddViewController.swift */; };
+		D598D8C52525A63E00A257ED /* SongTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D598D8C32525A63E00A257ED /* SongTableViewCell.swift */; };
+		D598D8C62525A63E00A257ED /* SongTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D598D8C42525A63E00A257ED /* SongTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +53,10 @@
 		D5778887252498D900CE60CD /* ComposeMemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ComposeMemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D577888B252498D900CE60CD /* ComposeMemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeMemoUITests.swift; sourceTree = "<group>"; };
 		D577888D252498D900CE60CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D598D8BF2525A5C900A257ED /* MemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoViewController.swift; sourceTree = "<group>"; };
+		D598D8C12525A5DB00A257ED /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
+		D598D8C32525A63E00A257ED /* SongTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongTableViewCell.swift; sourceTree = "<group>"; };
+		D598D8C42525A63E00A257ED /* SongTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SongTableViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,10 +110,14 @@
 				D5778869252498D400CE60CD /* AppDelegate.swift */,
 				D577886B252498D400CE60CD /* SceneDelegate.swift */,
 				D577886D252498D400CE60CD /* ViewController.swift */,
+				D598D8BF2525A5C900A257ED /* MemoViewController.swift */,
+				D598D8C12525A5DB00A257ED /* AddViewController.swift */,
 				D577886F252498D400CE60CD /* Main.storyboard */,
 				D5778872252498D900CE60CD /* Assets.xcassets */,
 				D5778874252498D900CE60CD /* LaunchScreen.storyboard */,
 				D5778877252498D900CE60CD /* Info.plist */,
+				D598D8C32525A63E00A257ED /* SongTableViewCell.swift */,
+				D598D8C42525A63E00A257ED /* SongTableViewCell.xib */,
 			);
 			path = ComposeMemo;
 			sourceTree = "<group>";
@@ -232,6 +244,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D598D8C62525A63E00A257ED /* SongTableViewCell.xib in Resources */,
 				D5778876252498D900CE60CD /* LaunchScreen.storyboard in Resources */,
 				D5778873252498D900CE60CD /* Assets.xcassets in Resources */,
 				D5778871252498D400CE60CD /* Main.storyboard in Resources */,
@@ -259,6 +272,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D598D8C52525A63E00A257ED /* SongTableViewCell.swift in Sources */,
+				D598D8C22525A5DB00A257ED /* AddViewController.swift in Sources */,
+				D598D8C02525A5C900A257ED /* MemoViewController.swift in Sources */,
 				D577886E252498D400CE60CD /* ViewController.swift in Sources */,
 				D577886A252498D400CE60CD /* AppDelegate.swift in Sources */,
 				D577886C252498D400CE60CD /* SceneDelegate.swift in Sources */,
