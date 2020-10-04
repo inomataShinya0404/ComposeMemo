@@ -8,15 +8,25 @@
 
 import UIKit
 
+protocol SongTableViewCellDelegate {
+    func cellTapped()
+}
+
 class SongTableViewCell: UITableViewCell {
 
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var nameLabel: UILabel!
     
+//    var songTableViewCellDelegate: SongTableViewCellDelegate? = nil
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
+    
+//    @IBAction func segueAction(_ sender: Any){
+//        songTableViewCellDelegate?.cellTapped()
+//    }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)

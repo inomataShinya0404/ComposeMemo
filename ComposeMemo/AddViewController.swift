@@ -9,8 +9,9 @@
 //新しく曲を追加する画面
 
 import UIKit
+import MediaPlayer
 
-class AddViewController: UIViewController, UITextFieldDelegate {
+class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerControllerDelegate {
 
     @IBOutlet var titleField: UITextField!
     @IBOutlet var nameField: UITextField!
@@ -19,6 +20,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     var saveArray = [String]()
     var titleArray = [String]()
     var nameArray = [String]()
+    var songArray = [String]()
     
     //配列を保存するUserDefaults
     var saveData: UserDefaults = UserDefaults.standard
@@ -33,6 +35,31 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         // Do any additional setup after loading the view.
     }
     
+    @IBAction  func selectMusic() {
+        print("音源の選択を開始")
+//        インスタンスを生成
+        let selecter = MPMediaPickerController()
+//        デリゲートの所在
+        selecter.delegate = self
+//        音源の複数選択を無効にする
+        selecter.allowsPickingMultipleItems = false
+//        セレクターを表示する
+        present(selecter, animated: true, completion: nil)
+    }
+    
+    //        曲の選択が完了されたときのメソッド
+    func mediaPicker(_ mediaPicker: MPMediaPickerController, didPickMediaItems mediaItemCollection: MPMediaItemCollection) {
+        
+        
+        print("曲が選択されました")
+        
+//        songArray.append()
+    }
+    
+//    曲の選択がキャンセルされたときのメソッド
+    func mediaPickerDidCancel(_ mediaPicker: MPMediaPickerController) {
+        dismiss(animated: true, completion: nil)
+    }
 
     /*
     // MARK: - Navigation
