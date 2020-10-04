@@ -46,8 +46,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
 
     //TextFieldと読み込んだ音源を配列にブチ込む
     @IBAction func saveButton() {
-//        saveArray.append(titleField.text!)
-//        saveArray.append(nameField.text!)
         titleArray.append(titleField.text!)
         nameArray.append(nameField.text!)
         
@@ -68,6 +66,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         }
             ))
         present(aleart, animated: true, completion: nil)
+
     }
     
     //ViewControllerに戻る

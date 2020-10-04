@@ -48,6 +48,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell") as! SongTableViewCell
         
         cell.titleLabel.text = titleArray[indexPath.row]
+//        cell.nameLabel.text = nameArray[indexPath.row]
         
         return cell
     }
@@ -69,7 +70,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewWillAppear(animated)
         
         if UserDefaults.standard.object(forKey: "title") != nil {
-            songArray = UserDefaults.standard.object(forKey: "title") as! [String]
+            titleArray = UserDefaults.standard.object(forKey: "title") as! [String]
         }
         //tableViewをリロードする
         self.table.reloadData()

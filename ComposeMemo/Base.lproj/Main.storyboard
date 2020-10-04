@@ -119,11 +119,7 @@
                                                 <action selector="cancel" destination="Hc9-0p-O3R" id="EY4-p9-GQX"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="Save" id="sIU-w9-Wpn">
-                                            <connections>
-                                                <action selector="saveButton" destination="Hc9-0p-O3R" id="Zii-Ro-wvF"/>
-                                            </connections>
-                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" title="Save" id="sIU-w9-Wpn"/>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -144,7 +140,13 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="ivb-JK-iY2"/>
                     </view>
-                    <navigationItem key="navigationItem" id="ATQ-8Q-fxJ"/>
+                    <navigationItem key="navigationItem" id="ATQ-8Q-fxJ">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="GqX-6K-mVp">
+                            <connections>
+                                <action selector="saveButton" destination="Hc9-0p-O3R" id="T8A-V7-ojP"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="nameField" destination="dls-IX-gOw" id="1KZ-2g-qHT"/>
                         <outlet property="titleField" destination="KBn-ig-tMB" id="E7H-g0-QTA"/>
