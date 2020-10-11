@@ -17,11 +17,14 @@ class MemoViewController: UIViewController, MPMediaPickerControllerDelegate {
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var artistLabel: UILabel!
     
+    //配列を保存するuserDefaults
+    var defaults:UserDefaults = UserDefaults.standard
     var titleArray = [String]()
     var nameArray = [String]()
     
-    //配列を保存するuserDefaults
-    var defaults:UserDefaults = UserDefaults.standard
+    //この画面の操作から要素を入れられる配列
+    var memoArray = [String]()
+    var timeArray = [Timer]()
     
     //MediaPlayerのインスタンスを作成
     var player: MPMusicPlayerController!
@@ -37,6 +40,9 @@ class MemoViewController: UIViewController, MPMediaPickerControllerDelegate {
     var playorpause = 0
     //曲の再生位置の変数
     var currentTime = 0.0
+    
+    //メモを追加するときに使うalert
+    let memoAlert = UIAlertController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +64,20 @@ class MemoViewController: UIViewController, MPMediaPickerControllerDelegate {
             titleArray = UserDefaults.standard.object(forKey: "title") as! [String]
             nameArray = UserDefaults.standard.object(forKey: "name") as! [String]
         }
+        
+        //ディレクトリを探してパスを取得
+/*
+        let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask[0])
+        guard let fileName = try! FileManager.default.contentsOfDirectory(atPath: documentPath) else{
+            return
+        }
+        return fileName.compactMap { fileName in
+            guard let content = try! String(contentsOfFile: documentPath + "/" + fileName, encoding: .utf8) else {
+                return nil
+            }
+            return content
+        }
+ */
     }
     
     /*
@@ -106,11 +126,27 @@ class MemoViewController: UIViewController, MPMediaPickerControllerDelegate {
     }
     
     @IBAction func memo() {
-//        ボタンが押されたらコメント欄を表示
+//        ボタンが押されたらtextField付きアラートを出してコメント欄を表示
+        var alertTextField: UITextField?
+        
+        let memoingAlert = UIAlertController(title: "メモを入力",
+                                             message: "記録したいことを書き込みましょう！",
+                                             preferredStyle: UIAlertController.Style.alert)
+        memoingAlert.addTextField(
+            configurationHandler: {(textField: UITextField!) in
+                alertTextField = textField})
+        
+        //OKボタンとCancelボタンを実装
+        memoingAlert.addAction(UIAlertAction(title: "Cancel",style: UIAlertAction.Style.cancel,handler: nil))
+        memoingAlert.addAction(UIAlertAction(title: "OK",style: UIAlertAction.Style.default))
+        present(memoAlert, animated: true, completion: nil)
+        
+//    アラートのOKが押されたらメモを入れておく配列に追加する
         
 //        メモされた再生時間を記録
         
 //        キーボードは改行で閉じれる
+        
         
 //        textFiledの内容を配列に入れる
         

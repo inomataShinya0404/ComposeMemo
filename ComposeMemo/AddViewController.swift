@@ -31,9 +31,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
 
     //配列を保存するUserDefaults
     var saveData: UserDefaults = UserDefaults.standard
-    
-    let alert: UIAlertController!
-        
+            
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -62,89 +60,46 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
     func mediaPicker(_ mediaPicker: MPMediaPickerController, didPickMediaItems mediaItemCollection: MPMediaItemCollection) {
         
         picker.setQueue(with: mediaItemCollection)
-        dismiss(animated: true, completion: nil)
         print("曲が選択されました")
         
 //        add : 複数曲の選択を不可にしたい
 //        add : 曲の選択が終わったらボタンの文字を「選択しました」に変更したい
         
-//        選択した曲をデータ型に変換する
+//        選択した曲をディレクトリファイルに突っ込む
+        do{
+            let fileManager = FileManager.default
+            let docs = try fileManager.url(for: .documentDirectory,
+                                           in: .userDomainMask,
+                                           appropriateFor: nil,
+                                           create: false)
+            let path = docs.appendingPathComponent("picked.mp3")
+            let data = "Hello, world!".data(using: .utf8)!
+            
+            fileManager.createFile(atPath: path.path,
+                                   contents: data, attributes: nil)
+            print("ディレクトリに追加が完了")
+        } catch {
+            print(error)
+        }
+        
 //        曲のデータ型をsongArrayに突っ込む
         
-}
+        dismiss(animated: true, completion: nil)
 
+}
+    
 //    曲の選択がキャンセルされたときのメソッド
     func mediaPickerDidCancel(_ mediaPicker: MPMediaPickerController) {
         //pickerを閉じる
         dismiss(animated: true, completion: nil)
     }
     
-    func mediaPicker(_ mediaPicker: MPMediaPickerController, didPickMediaItems mediaItemCollection: MPMediaItemCollection){
-        mediaPicker.dismiss(animated: true) {
-            let item: MPMediaItem = mediaItemCollection.items[0]
-            let pathURL: URL? = item.value(forProperty: MPMediaItemPropertyAssetURL) as? URL
-            if pathURL == nil {
-                self.alert(message: "")
-                return
-            }
-            
-            let song_Title = item.value(forProperty: MPMediaItemPropertyTitle) as! String
-            let filename_song = song_Title.replacingOccurrences(of: "", with: "_")
-            
-            //get file extension andmime type
-            let str = pathURL!.absoluteString
-            let str2 = str.replacingOccurrences(of: "ipod-library://item/item", with: "")
-            let arr = str2.components(separatedBy: "?")
-            var mimeType = arr[0]
-            mimeType = mimeType.replacingOccurrences(of: ".", with: "")
-            
-            //Export the ipod library as .m4a file to local directory for remote upload
-            let exportSession = AVAssetExportSession(asset: AVAsset(url: pathURL!), presetName: AVAssetExportPresetAppleM4A)
-            exportSession?.shoulOptimizeForNetworkUse = true
-            exportSession?.outputFileType = AVFileType.m4a
-            exportSession?.metadata = AVAsset(url: pathURL!).metadata
-            
-            let documentURL = try! FileManager.default.urls
-            (for: documentDirectory,
-             in: .userDomainMask,
-             appropriateFor: nil,
-             create: true)
-            let outputURL = documentURL.appendingPathComponet("\(filename_song).m4a")
-            
-            //Delete Existing file
-            do {
-                try FileManager.default.removeItem(at: outputURL)
-            } catch let error as NSError {
-                print(error.debugDescription)
-            }
-            
-            exportSession?.outputURL = outputURL
-            exportSession?.exportAsynchronously(completionHandler: { () -> Void in
-                
-                if (exportSession!.status == AVAssetExportSession.Status.completed)
-                {
-                    print("AV export succeeded.")
-                    self.alert(message: "File donwloaded successfully")
-                    
-                    do{
-                        let newURL = outputURL.deletingPathExtension().appendingPathExtension("mp3")
-                        let str = try FileManager.default.moveItem(at: outputURL, to: newURL)
-                        
-                        print(str)
-                    } catch {
-                        print("the file could not be loaded")
-                    }
-                }
-                else if (exportSession!.status == AVAssetExportSession.Status.cancelled)
-                {
-                    print("AV export cancelled")
-                }
-                else
-                {
-                    print("AV exprot faild with error:- ", exportSession!.error!.localizedDescription)
-                }
-            })
-        }
+    //ここ謎
+    func getURL() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let docsDirect = paths[0]
+        let url = docsDirect.appendingPathComponent("selected.m4a")
+        return url
     }
 
     /*
@@ -169,7 +124,9 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
         
 //        <------ アラート ------>
         //Save完了のアラートを出してやる
-        let aleart: UIAlertController = UIAlertController(title: "保存", message: "メモの保存が完了しました。", preferredStyle: .alert)
+        let aleart: UIAlertController = UIAlertController(title: "保存",
+                                                          message: "メモの保存が完了しました。",
+                                                          preferredStyle: .alert)
         //アラートのOKボタン
         aleart.addAction(UIAlertAction(
             title: "OK",
