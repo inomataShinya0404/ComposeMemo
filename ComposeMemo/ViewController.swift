@@ -42,7 +42,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return titleArray.count
     }
     
-//    tableViewCellにsongArrayの内容を表示してやる
+//    tableViewCellにArrayの内容を表示してやる
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell") as! SongTableViewCell
         
@@ -55,12 +55,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //    cellをタップすると画面遷移する
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         print("cellがタップされました")
-        self.performSegue(withIdentifier: "Segue名", sender: nil)
+        self.performSegue(withIdentifier: "toMemo", sender: nil)
     }
     
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        let toMemo = segue.destination as! MemoViewController
+//        if segue.identifier == "toMemo" {
+//            let memoVC: MemoViewController = segue.destination as! MemoViewController
 //
+//        }
 //    }
   
 //    tableViewCellの高さを定義

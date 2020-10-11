@@ -20,31 +20,28 @@ class MemoViewController: UIViewController, MPMediaPickerControllerDelegate {
     var titleArray = [String]()
     var nameArray = [String]()
     
-    //    配列を保存するuserDefaults
+    //配列を保存するuserDefaults
     var defaults:UserDefaults = UserDefaults.standard
     
     //MediaPlayerのインスタンスを作成
     var player: MPMusicPlayerController!
     var query: MPMediaQuery!
+    
     //タイマー
     var time = Timer()
     
+    //再生時間の長さ
     var timeInterval = TimeInterval()
     
-    //    再生しているか停止しているかを判別するのに使う変数
-        var playorpause = 0
-    //    曲の再生位置の変数
-        var currentTime = 0.0
+    //再生しているか停止しているかを判別するのに使う変数
+    var playorpause = 0
+    //曲の再生位置の変数
+    var currentTime = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-         if UserDefaults.standard.object(forKey: "title") != nil {
-             titleArray = UserDefaults.standard.object(forKey: "title") as! [String]
-             nameArray = UserDefaults.standard.object(forKey: "name") as! [String]
-         }
         
-        //プレイヤーの準備
+//        プレイヤーの準備
         player = MPMusicPlayerController.applicationMusicPlayer
         query = MPMediaQuery.songs()
         player.setQueue(with: query)
@@ -55,7 +52,14 @@ class MemoViewController: UIViewController, MPMediaPickerControllerDelegate {
         // Do any additional setup after loading the view.
     }
     
-
+    override func viewWillAppear(_ animated: Bool) {
+        if UserDefaults.standard.object(forKey: "title") != nil {
+           print("ラベルを表示するよ")
+            titleArray = UserDefaults.standard.object(forKey: "title") as! [String]
+            nameArray = UserDefaults.standard.object(forKey: "name") as! [String]
+        }
+    }
+    
     /*
     // MARK: - Navigation
 
@@ -99,6 +103,20 @@ class MemoViewController: UIViewController, MPMediaPickerControllerDelegate {
     @IBAction func sliderAction(){
         player.currentPlaybackTime = TimeInterval(slider.value)
         currentTime = player.currentPlaybackTime
+    }
+    
+    @IBAction func memo() {
+//        ボタンが押されたらコメント欄を表示
+        
+//        メモされた再生時間を記録
+        
+//        キーボードは改行で閉じれる
+        
+//        textFiledの内容を配列に入れる
+        
+//        再生時間(currentTime)を保存
+        
+//        メモ欄にメモを表示する
     }
     
     @IBAction func back() {

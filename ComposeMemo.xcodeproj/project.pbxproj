@@ -110,8 +110,8 @@
 				D5778869252498D400CE60CD /* AppDelegate.swift */,
 				D577886B252498D400CE60CD /* SceneDelegate.swift */,
 				D577886D252498D400CE60CD /* ViewController.swift */,
-				D598D8BF2525A5C900A257ED /* MemoViewController.swift */,
 				D598D8C12525A5DB00A257ED /* AddViewController.swift */,
+				D598D8BF2525A5C900A257ED /* MemoViewController.swift */,
 				D577886F252498D400CE60CD /* Main.storyboard */,
 				D5778872252498D900CE60CD /* Assets.xcassets */,
 				D5778874252498D900CE60CD /* LaunchScreen.storyboard */,
@@ -453,6 +453,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6N48TJWJ95;
 				INFOPLIST_FILE = ComposeMemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -460,7 +461,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Shinya-Inomata.ComposeMemo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -471,6 +472,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6N48TJWJ95;
 				INFOPLIST_FILE = ComposeMemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -478,7 +480,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Shinya-Inomata.ComposeMemo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
