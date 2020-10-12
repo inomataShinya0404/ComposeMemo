@@ -50,7 +50,10 @@ class MemoViewController: UIViewController, MPMediaPickerControllerDelegate {
 //        プレイヤーの準備
         player = MPMusicPlayerController.applicationMusicPlayer
         query = MPMediaQuery.songs()
+        //曲をPlayerにセットする
         player.setQueue(with: query)
+        //リピートの有効化(１曲をリピート)
+        player.repeatMode = .one
         
 //        再生バーの初期化
         slider.value = 0.0
@@ -125,30 +128,34 @@ class MemoViewController: UIViewController, MPMediaPickerControllerDelegate {
         currentTime = player.currentPlaybackTime
     }
     
+    @IBOutlet var testLabel: UILabel!
+    
     @IBAction func memo() {
 //        ボタンが押されたらtextField付きアラートを出してコメント欄を表示
         var alertTextField: UITextField?
         
-        let memoingAlert = UIAlertController(title: "メモを入力",
-                                             message: "記録したいことを書き込みましょう！",
-                                             preferredStyle: UIAlertController.Style.alert)
-        memoingAlert.addTextField(
-            configurationHandler: {(textField: UITextField!) in
-                alertTextField = textField})
+//        <------ メモを残すための　アラート ------>
+        //アラートを出す
+        let alert = UIAlertController(title: "メモ",message: "メモの保存が完了しました。",preferredStyle: .alert)
+        //アラートのOKボタン
+        alert.addAction(UIAlertAction(title: "OK",style: .default,handler: { action in
+            //ボタンが押された時の動作
+            self.navigationController?.popViewController(animated: true)
+            print("OKボタンが押されました")
+        }
+        ))
         
-        //OKボタンとCancelボタンを実装
-        memoingAlert.addAction(UIAlertAction(title: "Cancel",style: UIAlertAction.Style.cancel,handler: nil))
-        memoingAlert.addAction(UIAlertAction(title: "OK",style: UIAlertAction.Style.default))
-        present(memoAlert, animated: true, completion: nil)
+        alert.addTextField(configurationHandler:{(textField: UITextField!) in
+            alertTextField = textField
+            alertTextField?.text = self.testLabel.text
+        })
+        
+        present(alert, animated: true, completion: nil)
         
 //    アラートのOKが押されたらメモを入れておく配列に追加する
+//        memoArray.append(alertTextField.text!)
         
-//        メモされた再生時間を記録
-        
-//        キーボードは改行で閉じれる
-        
-        
-//        textFiledの内容を配列に入れる
+//        メモされた再生時間を取得
         
 //        再生時間(currentTime)を保存
         
@@ -156,10 +163,20 @@ class MemoViewController: UIViewController, MPMediaPickerControllerDelegate {
     }
     
     @IBAction func back() {
-//        曲を止める
+//      曲を止める
+        currentTime = player.currentPlaybackTime
+        time.invalidate()
+        player.pause()
+        playorpause = 0
+        print("曲を停止")
         
-//        画面遷移を戻す
+//      画面遷移を戻す
         self.dismiss(animated: true, completion: nil)
     }
 
+//　　　　キーボードを開業で閉じるやつ
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }

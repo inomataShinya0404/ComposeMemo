@@ -53,17 +53,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
 //    cellをタップすると画面遷移する
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("cellがタップされました")
         self.performSegue(withIdentifier: "toMemo", sender: nil)
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "toMemo" {
-//            let memoVC: MemoViewController = segue.destination as! MemoViewController
-//
-//        }
-//    }
   
 //    tableViewCellの高さを定義
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -76,7 +69,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.nameArray.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .automatic)
     }
-    
     
     override func viewWillAppear(_ animated: Bool) {
         //XibカスタムCellのLabelに持ってきた値を表示する

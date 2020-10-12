@@ -21,6 +21,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
 
     @IBOutlet var titleField: UITextField!
     @IBOutlet var nameField: UITextField!
+    @IBOutlet var Photo: UIImageView!
     
     //上記データをまとめる配列
     var titleArray = [String]()
@@ -46,26 +47,21 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
     
     @IBAction  func selectMusic() {
         print("音源の選択を開始")
-//        インスタンスを生成
+//インスタンスを生成
         let selecter = MPMediaPickerController()
-//        デリゲートの所在
+//デリゲートの所在
         selecter.delegate = self
-//        音源の複数選択を無効にする
+//音源の複数選択を無効にする
         selecter.allowsPickingMultipleItems = false
-//        セレクターを表示する
+//セレクターを表示する
         present(selecter, animated: true, completion: nil)
     }
     
-//        曲の選択が完了されたときのメソッド
+//曲の選択が完了されたときのメソッド
     func mediaPicker(_ mediaPicker: MPMediaPickerController, didPickMediaItems mediaItemCollection: MPMediaItemCollection) {
-        
         picker.setQueue(with: mediaItemCollection)
         print("曲が選択されました")
-        
-//        add : 複数曲の選択を不可にしたい
-//        add : 曲の選択が終わったらボタンの文字を「選択しました」に変更したい
-        
-//        選択した曲をディレクトリファイルに突っ込む
+//選択した曲をディレクトリファイルに突っ込む
         do{
             let fileManager = FileManager.default
             let docs = try fileManager.url(for: .documentDirectory,
@@ -82,24 +78,36 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
             print(error)
         }
         
-//        曲のデータ型をsongArrayに突っ込む
+//曲のデータ型をsongArrayに突っ込む
         
         dismiss(animated: true, completion: nil)
-
 }
     
-//    曲の選択がキャンセルされたときのメソッド
+//曲の選択がキャンセルされたときのメソッド
     func mediaPickerDidCancel(_ mediaPicker: MPMediaPickerController) {
         //pickerを閉じる
         dismiss(animated: true, completion: nil)
     }
     
-    //ここ謎
+//URLを取得する(ここ謎)
     func getURL() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let docsDirect = paths[0]
         let url = docsDirect.appendingPathComponent("selected.m4a")
         return url
+    }
+    
+    func updateInformationUI(mediaItem: MPMediaItem){
+        titleField.text = mediaItem.albumTitle
+        nameField.text = mediaItem.albumArtist
+        
+        if let artwork = mediaItem.artwork {
+            let image = artwork.image(at: Photo.bound.size)
+            Photo.image = image
+        } else {
+            Photo.image = nil
+            Photo.backgroundColor = UIColor.gray
+        }
     }
 
     /*
@@ -114,7 +122,6 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
 
     //TextFieldと読み込んだ音源を配列にブチ込む
     @IBAction func saveButton() {
-//        var mp3data = picker.
         
         titleArray.append(titleField.text!)
         nameArray.append(nameField.text!)
@@ -123,20 +130,13 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
         saveData.set(nameArray, forKey: "name")
         
 //        <------ アラート ------>
-        //Save完了のアラートを出してやる
-        let aleart: UIAlertController = UIAlertController(title: "保存",
-                                                          message: "メモの保存が完了しました。",
-                                                          preferredStyle: .alert)
+        let aleart = UIAlertController(title: "保存",message: "メモの保存が完了しました。",preferredStyle: .alert)
         //アラートのOKボタン
-        aleart.addAction(UIAlertAction(
-            title: "OK",
-            style: .default,
-            handler: { action in
+        aleart.addAction(UIAlertAction(title: "OK",style: .default,handler: { action in
                 //ボタンが押された時の動作
                 self.navigationController?.popViewController(animated: true)
                 print("OKボタンが押されました")
-        }
-            ))
+        }))
         present(aleart, animated: true, completion: nil)
     }
     
@@ -145,6 +145,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
         self.dismiss(animated: true, completion: nil)
     }
     
+//    キーボードを改行で閉じる
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
