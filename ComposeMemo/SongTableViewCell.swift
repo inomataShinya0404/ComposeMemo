@@ -16,6 +16,7 @@ class SongTableViewCell: UITableViewCell {
 
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var nameLabel: UILabel!
+    @IBOutlet var artworkIV: UIImageView!
     
 //    var songTableViewCellDelegate: SongTableViewCellDelegate? = nil
     
@@ -23,10 +24,6 @@ class SongTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-    
-//    @IBAction func segueAction(_ sender: Any){
-//        songTableViewCellDelegate?.cellTapped()
-//    }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)

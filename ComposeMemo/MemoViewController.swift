@@ -7,15 +7,21 @@
 //
 
 //曲を再生してメモを加える画面
+/*
+ 【タスク】
+ ・音源をiPhoneのDocumentDirectlyから読み込む
+ ・Memoボタンが押されたらTextField付きのアラートが出てくる
+ */
 
 import UIKit
 import MediaPlayer
 
-class MemoViewController: UIViewController, MPMediaPickerControllerDelegate {
+class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerControllerDelegate {
 
     @IBOutlet var slider: UISlider!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var artistLabel: UILabel!
+    @IBOutlet var memoLabel: UILabel!
     
     //配列を保存するuserDefaults
     var defaults:UserDefaults = UserDefaults.standard
@@ -23,8 +29,8 @@ class MemoViewController: UIViewController, MPMediaPickerControllerDelegate {
     var nameArray = [String]()
     
     //この画面の操作から要素を入れられる配列
-    var memoArray = [String]()
-    var timeArray = [Timer]()
+    var memoArray:Array = [String]()
+    var timeArray:Array = [Timer]()
     
     //MediaPlayerのインスタンスを作成
     var player: MPMusicPlayerController!
@@ -32,42 +38,40 @@ class MemoViewController: UIViewController, MPMediaPickerControllerDelegate {
     
     //タイマー
     var time = Timer()
-    
     //再生時間の長さ
     var timeInterval = TimeInterval()
-    
     //再生しているか停止しているかを判別するのに使う変数
-    var playorpause = 0
+    var playorpause: Int = 0
     //曲の再生位置の変数
-    var currentTime = 0.0
+    var currentTime: Double = 0.0
     
     //メモを追加するときに使うalert
-    let memoAlert = UIAlertController()
+    var memoAlert = UIAlertController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        プレイヤーの準備
+        var saveData: UserDefaults = UserDefaults.standard
+        titleLabel.text = saveData.object(forKey: "title") as? String
+        artistLabel.text = saveData.object(forKey: "name") as? String
+        print("ラベルを表示しました")
+        
+        memoLabel.text = saveData.object(forKey: "memo") as? String
+        
+//プレイヤーの準備
         player = MPMusicPlayerController.applicationMusicPlayer
         query = MPMediaQuery.songs()
-        //曲をPlayerにセットする
+//曲をPlayerにセットする
         player.setQueue(with: query)
-        //リピートの有効化(１曲をリピート)
+//リピートの有効化(１曲をリピート)
         player.repeatMode = .one
-        
-//        再生バーの初期化
+//再生バーの初期化
         slider.value = 0.0
         
         // Do any additional setup after loading the view.
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        if UserDefaults.standard.object(forKey: "title") != nil {
-           print("ラベルを表示するよ")
-            titleArray = UserDefaults.standard.object(forKey: "title") as! [String]
-            nameArray = UserDefaults.standard.object(forKey: "name") as! [String]
-        }
-        
+        //曲を読み込む
         //ディレクトリを探してパスを取得
 /*
         let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask[0])
@@ -81,7 +85,6 @@ class MemoViewController: UIViewController, MPMediaPickerControllerDelegate {
             return content
         }
  */
-    }
     
     /*
     // MARK: - Navigation
@@ -96,10 +99,8 @@ class MemoViewController: UIViewController, MPMediaPickerControllerDelegate {
     @IBAction func play() {
         if playorpause == 0 {
             player.currentPlaybackTime = currentTime
-            
             player.play()
             playorpause = 1
-            
             print("曲を再生")
             
         } else {
@@ -109,17 +110,24 @@ class MemoViewController: UIViewController, MPMediaPickerControllerDelegate {
             playorpause = 0
             print("曲を停止")
         }
+        
+        //スライダーと曲を同期
+        time = Timer.scheduledTimer(timeInterval: 0.5,
+                                     target: self,
+                                     selector: #selector(updateSlider),
+                                     userInfo: nil,
+                                     repeats: true)
     }
     
     func updateSong(mediaItem: MPMediaItem){
-//        曲の情報を表示する
+//曲の情報を表示する
         titleLabel.text = mediaItem.albumTitle
         artistLabel.text = mediaItem.albumArtist
         timeInterval = mediaItem.playbackDuration
     }
     
-//    スライダーを曲の再生位置と同期させる
-    func updateSlider(){
+// スライダーを曲の再生位置と同期させる
+    @objc func updateSlider(){
         self.slider.setValue(Float(self.player.currentPlaybackTime), animated: true)
     }
     
@@ -131,35 +139,33 @@ class MemoViewController: UIViewController, MPMediaPickerControllerDelegate {
     @IBOutlet var testLabel: UILabel!
     
     @IBAction func memo() {
-//        ボタンが押されたらtextField付きアラートを出してコメント欄を表示
-        var alertTextField: UITextField?
-        
-//        <------ メモを残すための　アラート ------>
-        //アラートを出す
-        let alert = UIAlertController(title: "メモ",message: "メモの保存が完了しました。",preferredStyle: .alert)
-        //アラートのOKボタン
-        alert.addAction(UIAlertAction(title: "OK",style: .default,handler: { action in
-            //ボタンが押された時の動作
-            self.navigationController?.popViewController(animated: true)
-            print("OKボタンが押されました")
-        }
-        ))
-        
-        alert.addTextField(configurationHandler:{(textField: UITextField!) in
-            alertTextField = textField
-            alertTextField?.text = self.testLabel.text
-        })
-        
-        present(alert, animated: true, completion: nil)
-        
-//    アラートのOKが押されたらメモを入れておく配列に追加する
-//        memoArray.append(alertTextField.text!)
-        
+//        音源再生の停止
+        currentTime = player.currentPlaybackTime
+        player.pause()
+        time.invalidate()
+        playorpause = 0
 //        メモされた再生時間を取得
         
-//        再生時間(currentTime)を保存
+//        ボタンが押されたらtextField付きアラートを出してコメント欄を表示
+        var alertTextField: UITextField!
+        memoAlert = UIAlertController(title: "メモ",message: "記録したい内容を入力してください。",preferredStyle: .alert)
+        memoAlert.addTextField(configurationHandler:{(textField: UITextField!) in
+            alertTextField.delegate = self
+            alertTextField = textField
+        })
+        memoAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+            print("OKボタンが押されました")
+        }))
+        present(memoAlert, animated: true)
+
+        memoArray.append(alertTextField.text!)
+//        saveData.set(memoArray, forKey: "memo")
+        
+//        再生時間(currentTime)を配列に記録
+//        timeArray.append(currentTime!)
         
 //        メモ欄にメモを表示する
+//        reload系
     }
     
     @IBAction func back() {
@@ -170,11 +176,11 @@ class MemoViewController: UIViewController, MPMediaPickerControllerDelegate {
         playorpause = 0
         print("曲を停止")
         
-//      画面遷移を戻す
+//      画面遷移
         self.dismiss(animated: true, completion: nil)
     }
 
-//　　　　キーボードを開業で閉じるやつ
+//　　　　キーボードを改行で閉じるやつ
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
