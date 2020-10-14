@@ -19,14 +19,15 @@ import MediaPlayer
 class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerControllerDelegate {
 
     @IBOutlet var slider: UISlider!
+    
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var artistLabel: UILabel!
+    @IBOutlet var timerLabel: UILabel!
     @IBOutlet var memoLabel: UILabel!
     
-    //配列を保存するuserDefaults
-    var defaults:UserDefaults = UserDefaults.standard
-    var titleArray = [String]()
-    var nameArray = [String]()
+    @IBOutlet var memoTable: UITableView!
+    
+    @IBOutlet var playAndPauseButton: UIButton!
     
     //この画面の操作から要素を入れられる配列
     var memoArray:Array = [String]()
@@ -51,13 +52,10 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var saveData: UserDefaults = UserDefaults.standard
         titleLabel.text = saveData.object(forKey: "title") as? String
         artistLabel.text = saveData.object(forKey: "name") as? String
         print("ラベルを表示しました")
-        
-        memoLabel.text = saveData.object(forKey: "memo") as? String
-        
+                
 //プレイヤーの準備
         player = MPMusicPlayerController.applicationMusicPlayer
         query = MPMediaQuery.songs()
@@ -67,6 +65,8 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
         player.repeatMode = .one
 //再生バーの初期化
         slider.value = 0.0
+        
+        self.memoTable.register(UINib(nibName: "MemoTableViewCell", bundle: nil), forCellReuseIdentifier: "CustomCell")
         
         // Do any additional setup after loading the view.
     }
@@ -102,6 +102,7 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
             player.play()
             playorpause = 1
             print("曲を再生")
+            playAndPauseButton.setImage(UIImage(named: "再生ボタン.png"), for: UIControl.State())
             
         } else {
             currentTime = player.currentPlaybackTime
@@ -109,14 +110,16 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
             player.pause()
             playorpause = 0
             print("曲を停止")
+            playAndPauseButton.setImage(UIImage(named: "一時停止ボタン.png"), for: UIControl.State())
+
         }
         
         //スライダーと曲を同期
-        time = Timer.scheduledTimer(timeInterval: 0.5,
-                                     target: self,
-                                     selector: #selector(updateSlider),
-                                     userInfo: nil,
-                                     repeats: true)
+        time = Timer.scheduledTimer(timeInterval: 0.5, target: self,
+                                    selector: #selector(updateSlider),
+                                    userInfo: nil, repeats: true)
+        
+        timerLabel.text = String(format: "%", time)
     }
     
     func updateSong(mediaItem: MPMediaItem){
@@ -135,9 +138,7 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
         player.currentPlaybackTime = TimeInterval(slider.value)
         currentTime = player.currentPlaybackTime
     }
-    
-    @IBOutlet var testLabel: UILabel!
-    
+
     @IBAction func memo() {
 //        音源再生の停止
         currentTime = player.currentPlaybackTime
@@ -180,6 +181,13 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
         self.dismiss(animated: true, completion: nil)
     }
 
+//    tableViewCellにArrayの内容を表示してやる
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let memoCell = tableView.dequeueReusableCell(withIdentifier: "CustomCell") as! MemoTableViewCell
+        memoCell.memoLabel.text = memoArray[indexPath.row]
+        return memoCell
+    }
+    
 //　　　　キーボードを改行で閉じるやつ
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()

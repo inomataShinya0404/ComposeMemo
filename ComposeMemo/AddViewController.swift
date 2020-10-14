@@ -15,25 +15,23 @@
 import UIKit
 import MediaPlayer
 
+var titleArray: Array = [String]()
+var nameArray: Array = [String]()
+var songArray: Array = [String]()
+
+var saveData: UserDefaults = UserDefaults.standard
+
 class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerControllerDelegate{
 
-    //UI
     @IBOutlet var titleField: UITextField!
     @IBOutlet var nameField: UITextField!
+    
     @IBOutlet var artworkImageView: UIImageView!
+    
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var artistLabel: UILabel!
-    
-    //上記データをまとめる配列
-    var titleArray: Array = [String]()
-    var nameArray: Array = [String]()
-    var songArray: Array = [String]()
 
     var player: MPMusicPlayerController!
-
-    //配列を保存するUserDefaults
-    var saveData: UserDefaults = UserDefaults.standard
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,7 +77,6 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
         } catch let error as NSError {
             print(error)
         }
-//曲のデータ型をsongArrayに突っ込む
     }
     
     func mediaPickerDidCancel(_ mediaPicker: MPMediaPickerController) {
@@ -123,14 +120,10 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
         self.dismiss(animated: true, completion: nil)
     }
     
-//    曲の情報を表示するメソッド
     func updateInformationUI(mediaItem: MPMediaItem){
-        titleLabel.text = mediaItem.albumTitle
-        artistLabel.text = mediaItem.albumArtist
-        
         titleField.text = mediaItem.albumTitle
         nameField.text = mediaItem.albumArtist
-            
+        
         if let artwork = mediaItem.artwork {
                 let image = artwork.image(at: artworkImageView.bounds.size)
                 artworkImageView.image = image

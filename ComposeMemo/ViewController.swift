@@ -14,22 +14,9 @@
 
 import UIKit
 
-//extension ViewController: SongTableViewCellDelegate {
-//    func cellTapped() {
-//        dismiss(animated: true, completion: nil)
-//    }
-//}
-
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
 
     @IBOutlet var table: UITableView!
-    
-//    曲のデータを入れる配列
-    var titleArray = [String]()
-    var nameArray = [String]()
-
-//    配列を保存するuserDefaults
-    var defaults:UserDefaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,11 +51,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return 70.0
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        self.titleArray.remove(at: indexPath.row)
-        self.nameArray.remove(at: indexPath.row)
-        tableView.deleteRows(at: [indexPath], with: .automatic)
-    }
+//    cellをスライドで削除
+//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        self.titleArray.remove(at: indexPath.row)
+//        self.nameArray.remove(at: indexPath.row)
+//        tableView.deleteRows(at: [indexPath], with: .automatic)
+//    }
     
 /*  cellを追加するメソッド
     @IBAction func addTableViewCell() {
@@ -87,7 +75,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewWillAppear(animated)
         
         if UserDefaults.standard.object(forKey: "title") != nil {
-            var saveData: UserDefaults = UserDefaults.standard
             titleArray = saveData.object(forKey: "title") as! [String]
             nameArray = saveData.object(forKey: "name") as! [String]
         }

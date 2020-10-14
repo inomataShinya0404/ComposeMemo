@@ -19,6 +19,11 @@
 		D598D8C22525A5DB00A257ED /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D598D8C12525A5DB00A257ED /* AddViewController.swift */; };
 		D598D8C52525A63E00A257ED /* SongTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D598D8C32525A63E00A257ED /* SongTableViewCell.swift */; };
 		D598D8C62525A63E00A257ED /* SongTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D598D8C42525A63E00A257ED /* SongTableViewCell.xib */; };
+		D5F431EE25363CE600A01D7A /* MemoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F431EC25363CE600A01D7A /* MemoTableViewCell.swift */; };
+		D5F431EF25363CE600A01D7A /* MemoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5F431ED25363CE600A01D7A /* MemoTableViewCell.xib */; };
+		D5F431F4253640C200A01D7A /* 再生ボタン.gif in Resources */ = {isa = PBXBuildFile; fileRef = D5F431F3253640C200A01D7A /* 再生ボタン.gif */; };
+		D5F431F9253640D000A01D7A /* 一時停止ボタン.png in Resources */ = {isa = PBXBuildFile; fileRef = D5F431F8253640D000A01D7A /* 一時停止ボタン.png */; };
+		D5F431FE253646A000A01D7A /* NoImage.png in Resources */ = {isa = PBXBuildFile; fileRef = D5F431FD2536469F00A01D7A /* NoImage.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +62,11 @@
 		D598D8C12525A5DB00A257ED /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		D598D8C32525A63E00A257ED /* SongTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongTableViewCell.swift; sourceTree = "<group>"; };
 		D598D8C42525A63E00A257ED /* SongTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SongTableViewCell.xib; sourceTree = "<group>"; };
+		D5F431EC25363CE600A01D7A /* MemoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoTableViewCell.swift; sourceTree = "<group>"; };
+		D5F431ED25363CE600A01D7A /* MemoTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MemoTableViewCell.xib; sourceTree = "<group>"; };
+		D5F431F3253640C200A01D7A /* 再生ボタン.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "再生ボタン.gif"; sourceTree = "<group>"; };
+		D5F431F8253640D000A01D7A /* 一時停止ボタン.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "一時停止ボタン.png"; sourceTree = "<group>"; };
+		D5F431FD2536469F00A01D7A /* NoImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NoImage.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +117,9 @@
 		D5778868252498D400CE60CD /* ComposeMemo */ = {
 			isa = PBXGroup;
 			children = (
+				D5F431FD2536469F00A01D7A /* NoImage.png */,
+				D5F431F8253640D000A01D7A /* 一時停止ボタン.png */,
+				D5F431F3253640C200A01D7A /* 再生ボタン.gif */,
 				D5778869252498D400CE60CD /* AppDelegate.swift */,
 				D577886B252498D400CE60CD /* SceneDelegate.swift */,
 				D577886D252498D400CE60CD /* ViewController.swift */,
@@ -118,6 +131,8 @@
 				D5778877252498D900CE60CD /* Info.plist */,
 				D598D8C32525A63E00A257ED /* SongTableViewCell.swift */,
 				D598D8C42525A63E00A257ED /* SongTableViewCell.xib */,
+				D5F431EC25363CE600A01D7A /* MemoTableViewCell.swift */,
+				D5F431ED25363CE600A01D7A /* MemoTableViewCell.xib */,
 			);
 			path = ComposeMemo;
 			sourceTree = "<group>";
@@ -247,7 +262,11 @@
 				D598D8C62525A63E00A257ED /* SongTableViewCell.xib in Resources */,
 				D5778876252498D900CE60CD /* LaunchScreen.storyboard in Resources */,
 				D5778873252498D900CE60CD /* Assets.xcassets in Resources */,
+				D5F431F9253640D000A01D7A /* 一時停止ボタン.png in Resources */,
 				D5778871252498D400CE60CD /* Main.storyboard in Resources */,
+				D5F431F4253640C200A01D7A /* 再生ボタン.gif in Resources */,
+				D5F431FE253646A000A01D7A /* NoImage.png in Resources */,
+				D5F431EF25363CE600A01D7A /* MemoTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,6 +294,7 @@
 				D598D8C52525A63E00A257ED /* SongTableViewCell.swift in Sources */,
 				D598D8C22525A5DB00A257ED /* AddViewController.swift in Sources */,
 				D598D8C02525A5C900A257ED /* MemoViewController.swift in Sources */,
+				D5F431EE25363CE600A01D7A /* MemoTableViewCell.swift in Sources */,
 				D577886E252498D400CE60CD /* ViewController.swift in Sources */,
 				D577886A252498D400CE60CD /* AppDelegate.swift in Sources */,
 				D577886C252498D400CE60CD /* SceneDelegate.swift in Sources */,
