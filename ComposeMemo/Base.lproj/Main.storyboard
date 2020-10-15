@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--音源一覧-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="ComposeMemo" customModuleProvider="target" sceneMemberID="viewController">
@@ -26,7 +26,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="FUI-f3-HFe">
+                    <navigationItem key="navigationItem" title="音源一覧" id="FUI-f3-HFe">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="64n-Fu-fzV">
                             <connections>
                                 <segue destination="Hc9-0p-O3R" kind="show" identifier="" id="9k4-tI-KQA"/>
@@ -42,7 +42,7 @@
             </objects>
             <point key="canvasLocation" x="1047.8260869565217" y="126.5625"/>
         </scene>
-        <!--Memo View Controller-->
+        <!--メモ画面-->
         <scene sceneID="0Gi-XW-vFG">
             <objects>
                 <viewController id="YcQ-Ec-9sb" customClass="MemoViewController" customModule="ComposeMemo" customModuleProvider="target" sceneMemberID="viewController">
@@ -110,8 +110,8 @@
                                     <action selector="sliderAction" destination="YcQ-Ec-9sb" eventType="touchDragInside" id="5Rj-cG-8pn"/>
                                 </connections>
                             </slider>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dbe-5Z-C9Q">
-                                <rect key="frame" x="20" y="578" width="42" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dbe-5Z-C9Q">
+                                <rect key="frame" x="20" y="578" width="54" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -121,9 +121,10 @@
                         <viewLayoutGuide key="safeArea" id="khf-o5-ziF"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="oi9-fY-84X"/>
+                    <navigationItem key="navigationItem" title="メモ画面" id="oi9-fY-84X"/>
                     <connections>
                         <outlet property="artistLabel" destination="Z8A-hc-8HQ" id="VUZ-2b-n0e"/>
+                        <outlet property="artwork" destination="XLh-7g-LqK" id="as3-wZ-fN1"/>
                         <outlet property="memoTable" destination="XOU-gO-ycI" id="zpg-UG-el4"/>
                         <outlet property="playAndPauseButton" destination="ARg-FR-6mc" id="Lc0-RD-XdD"/>
                         <outlet property="slider" destination="4yv-IP-oit" id="iFR-es-dTx"/>
@@ -135,7 +136,7 @@
             </objects>
             <point key="canvasLocation" x="1976.8115942028987" y="390.40178571428572"/>
         </scene>
-        <!--Add View Controller-->
+        <!--音源を選択-->
         <scene sceneID="xKl-t9-O5G">
             <objects>
                 <viewController id="Hc9-0p-O3R" customClass="AddViewController" customModule="ComposeMemo" customModuleProvider="target" sceneMemberID="viewController">
@@ -186,9 +187,11 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U24-JY-i5Y">
                                 <rect key="frame" x="67" y="267" width="280" height="280"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="systemYellowColor"/>
+                                <color key="backgroundColor" systemColor="systemGreenColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
-                                <state key="normal" title="選曲"/>
+                                <state key="normal" title="選曲">
+                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
                                 <connections>
                                     <action selector="selectMusic" destination="Hc9-0p-O3R" eventType="touchUpInside" id="zrT-Mt-iI1"/>
                                 </connections>
@@ -198,25 +201,18 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Tittle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PSu-r0-oS8">
-                                <rect key="frame" x="87" y="555" width="118" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="アートワークをタップで音源の選択" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PSu-r0-oS8">
+                                <rect key="frame" x="67" y="555" width="280" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Artist" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lqA-gA-3id">
-                                <rect key="frame" x="213" y="555" width="114" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ivb-JK-iY2"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="ATQ-8Q-fxJ">
+                    <navigationItem key="navigationItem" title="音源を選択" id="ATQ-8Q-fxJ">
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="GqX-6K-mVp">
                             <connections>
                                 <action selector="saveButton" destination="Hc9-0p-O3R" id="T8A-V7-ojP"/>
@@ -224,7 +220,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="artistLabel" destination="lqA-gA-3id" id="n90-UX-vFA"/>
                         <outlet property="artworkImageView" destination="B2c-qJ-tB3" id="3Dv-2l-Q9d"/>
                         <outlet property="nameField" destination="dls-IX-gOw" id="1KZ-2g-qHT"/>
                         <outlet property="titleField" destination="KBn-ig-tMB" id="E7H-g0-QTA"/>
@@ -258,8 +253,8 @@
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
-        <systemColor name="systemYellowColor">
-            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

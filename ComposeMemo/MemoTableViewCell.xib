@@ -23,7 +23,7 @@
                         <state key="normal" title="Button"/>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yV0-sy-KoY">
-                        <rect key="frame" x="70" y="12" width="234" height="21"/>
+                        <rect key="frame" x="81" y="12" width="223" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
@@ -34,6 +34,8 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="memo" destination="yV0-sy-KoY" id="JjK-h8-lDM"/>
+                <outlet property="memoLabel" destination="yV0-sy-KoY" id="kDB-8I-KHh"/>
+                <outlet property="timeButoon" destination="IbB-gB-fNn" id="kEe-Jk-w3v"/>
             </connections>
             <point key="canvasLocation" x="137.68115942028987" y="83.705357142857139"/>
         </tableViewCell>

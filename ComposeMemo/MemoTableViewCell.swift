@@ -11,6 +11,7 @@ import UIKit
 class MemoTableViewCell: UITableViewCell {
 
     @IBOutlet var memoLabel: UILabel!
+    @IBOutlet var timeButoon: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()

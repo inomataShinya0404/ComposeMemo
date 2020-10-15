@@ -21,6 +21,11 @@ var songArray: Array = [String]()
 
 var saveData: UserDefaults = UserDefaults.standard
 
+var selecter = MPMediaPickerController()
+
+let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+let url = documentsPath.appendingPathComponent("SelectedMusic.m4a")
+
 class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerControllerDelegate{
 
     @IBOutlet var titleField: UITextField!
@@ -36,18 +41,17 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        titleField.delegate = self
-        nameField.delegate = self
-        
         let selecter = MPMediaPickerController()
         selecter.delegate = self
         selecter.allowsPickingMultipleItems = false
         present(selecter, animated: true, completion: nil)
+        
+        titleField.delegate = self
+        nameField.delegate = self
     }
     
     @IBAction  func selectMusic() {
         print("音源の選択を開始")
-        let selecter = MPMediaPickerController()
         selecter.delegate = self
         selecter.allowsPickingMultipleItems = false
         present(selecter, animated: true, completion: nil)
@@ -62,20 +66,6 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
         
         if let mediaItem = mediaItemCollection.items.first {
             updateInformationUI(mediaItem: mediaItem)
-        }
-        
-//選択した曲をディレクトリファイルに突っ込む
-        let fileManager = FileManager.default
-        let documentURL = try! fileManager.url(for: .documentDirectory,
-                                               in: .userDomainMask,
-                                               appropriateFor: nil,
-                                               create: true)
-        let outputURL = documentURL.appendingPathComponent("picked.m4a")
-        do{
-            try FileManager.default.removeItem(at: outputURL)
-            print("removed")
-        } catch let error as NSError {
-            print(error)
         }
     }
     
@@ -108,12 +98,33 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
         saveData.set(titleArray, forKey: "title")
         saveData.set(nameArray, forKey: "name")
         
-        let aleart = UIAlertController(title: "保存",message: "メモの保存が完了しました。",preferredStyle: .alert)
+        if selecter == nil {
+            let selectMusicAlerat = UIAlertController(title: "音源が選択されていません",
+                                                      message: "選択ボタンをタップして音源を選択してください。",
+                                                      preferredStyle: .alert)
+            selectMusicAlerat.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                self.navigationController?.popViewController(animated: true)
+                print("選曲していません！")
+            }))
+            present(selectMusicAlerat, animated: true, completion: nil)
+        }
+        
+        let aleart = UIAlertController(title: "保存",message: "音源の保存が完了しました。",preferredStyle: .alert)
         aleart.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
                 self.navigationController?.popViewController(animated: true)
                 print("OKボタンが押されました")
         }))
         present(aleart, animated: true, completion: nil)
+        
+//選択した曲をディレクトリファイルに突っ込む
+        do {
+            let data:[UInt8] = ""
+            try Data(bytes: data, count: data.count).write(to: documentsPath)
+          print("書き込み成功")
+        } catch let error {
+          print(error.localizedDescription)
+          print("書き込み失敗")
+        }
     }
     
     @IBAction func cancel() {
