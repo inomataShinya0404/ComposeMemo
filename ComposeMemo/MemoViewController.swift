@@ -53,29 +53,28 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //音源をdocumentDirectoryか読み込む
-        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        do {
-            let url = documentsURL.appendingPathComponent("SelectedMusic.m4a")
-            let m4aData = try Data(contentsOf: url)
-            print("読み込み成功")
-        } catch {
-            print("読み込み失敗")
-        }
-        
         titleArray = saveData.object(forKey: "title") as! [String]
         nameArray = saveData.object(forKey: "name") as! [String]
-        //ラベルに表示
+//ラベルに表示させないといけないよ
         print("ラベルを表示しました")
-        
-        if artwork.image == nil {
-            artwork.image = UIImage(named: "NoImage.png")
-        }
 
-//プレイヤーの準備
+//音源をdocumentDirectoryか読み込む
+        let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let url = documentPath.appendingPathComponent(" ")
+        if FileManager.default.fileExists(atPath: url.path) {
+            do {
+                player = try AVAudioPlayer(contentsOf: url)
+                guard let player = AVAudioPlayer else { return }
+                print("読み込み成功")
+            } catch {
+                print("読み込み失敗")
+            }
+        } else {
+            print("file not found")
+        }
+        
         player = MPMusicPlayerController.applicationMusicPlayer
         query = MPMediaQuery.songs()
-//曲をPlayerにセットする
         player.setQueue(with: query)
 //リピートの有効化(１曲をリピート)
         player.repeatMode = .one
@@ -86,22 +85,7 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
         
         // Do any additional setup after loading the view.
     }
-    
-        //曲を読み込む
-        //ディレクトリを探してパスを取得
-/*
-        let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask[0])
-        guard let fileName = try! FileManager.default.contentsOfDirectory(atPath: documentPath) else{
-            return
-        }
-        return fileName.compactMap { fileName in
-            guard let content = try! String(contentsOfFile: documentPath + "/" + fileName, encoding: .utf8) else {
-                return nil
-            }
-            return content
-        }
- */
-    
+
     /*
     // MARK: - Navigation
 
@@ -119,7 +103,6 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
             playorpause = 1
             print("曲を再生")
             playAndPauseButton.setImage(UIImage(named: "再生ボタン.png"), for: UIControl.State())
-            
         } else {
             currentTime = player.currentPlaybackTime
             time.invalidate()
@@ -127,18 +110,22 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
             playorpause = 0
             print("曲を停止")
             playAndPauseButton.setImage(UIImage(named: "一時停止ボタン.png"), for: UIControl.State())
-
         }
         
         //スライダーと曲を同期
-        time = Timer.scheduledTimer(timeInterval: 0.5, target: self,
+        time = Timer.scheduledTimer(timeInterval: 1,
+                                    target: self,
                                     selector: #selector(updateSlider),
-                                    userInfo: nil, repeats: true)
-        
-        timerLabel.text = String(format: "%", time)
+                                    userInfo: nil,
+                                    repeats: true)
+        //再生時間をラベルに表示させる
+        time = Timer.scheduledTimer(timeInterval: 1,
+                                    target: self,
+                                    selector: #selector(updateTimeLabel),
+                                    userInfo: nil,
+                                    repeats: true)
     }
     
-// スライダーを曲の再生位置と同期させる
     @objc func updateSlider(){
         self.slider.setValue(Float(self.player.currentPlaybackTime), animated: true)
     }
@@ -146,6 +133,11 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
     @IBAction func sliderAction(){
         player.currentPlaybackTime = TimeInterval(slider.value)
         currentTime = player.currentPlaybackTime
+    }
+    
+    @objc func updateTimeLabel() {
+        currentTime = currentTime + 1
+        timerLabel.text = String(format: "%", currentTime)
     }
 
     @IBAction func memo() {
@@ -180,14 +172,12 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
     }
     
     @IBAction func back() {
-//      曲を止める
         currentTime = player.currentPlaybackTime
         time.invalidate()
         player.pause()
         playorpause = 0
         print("曲を停止")
         
-//      画面遷移
         self.dismiss(animated: true, completion: nil)
     }
 

@@ -8,9 +8,7 @@
 
 //新しく曲を追加する画面
 /*
- 【タスク】
- ・選曲 -> DocumentDirectlyに保存 -> ID的な何か
- */
+*/
 
 import UIKit
 import MediaPlayer
@@ -24,7 +22,7 @@ var saveData: UserDefaults = UserDefaults.standard
 var selecter = MPMediaPickerController()
 
 let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-let url = documentsPath.appendingPathComponent("SelectedMusic.m4a")
+let url = documentsPath.appendingPathComponent("Select.m4a")
 
 class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerControllerDelegate{
 
@@ -63,6 +61,58 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
         player.setQueue(with: mediaItemCollection)
         print("曲が選択されました")
         dismiss(animated: true, completion: nil)
+        
+        let item: MPMediaItem = mediaItemCollection.items[0]
+        let pathURL: URL? = item.value(forProperty: MPMediaItemPropertyAssetURL) as? URL
+        if pathURL == nil {
+            return
+        }
+        
+        let song_title = item.value(forProperty: MPMediaItemPropertyTitle) as! String
+        let filename_song = song_title.replacingOccurrences(of: " ", with: "_")
+        
+        let string = pathURL!.absoluteString
+        let string2 = string.replacingOccurrences(of: "ipod-library://item/item", with: "")
+        let arr = string2.components(separatedBy: "?")
+        var mimeType = arr[0]
+        mimeType = mimeType.replacingOccurrences( of: ".", with: "")
+        
+        let exportSession = AVAssetExportSession(asset: AVAsset(url: pathURL!), presetName: AVAssetExportPresetAppleM4A)
+        exportSession?.shouldOptimizeForNetworkUse = true
+        exportSession?.outputFileType = AVFileType.m4a
+        exportSession?.metadata = AVAsset(url: pathURL!).metadata
+        
+        let documentURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        let outputURL = documentURL.appendingPathComponent("\(filename_song).m4a")
+        
+        do {
+            try FileManager.default.removeItem(at: outputURL)
+        } catch let error as NSError {
+            print(error.debugDescription)
+        }
+        
+        exportSession?.outputURL = outputURL
+        exportSession?.exportAsynchronously(completionHandler: { () -> Void in
+            if (exportSession!.status == AVAssetExportSession.Status.completed)
+            {
+                print("音源のエクスポートが成功しました")
+                do {
+                    let newURL = outputURL.deletingPathExtension().appendingPathExtension("mp3")
+                    let str = try FileManager.default.moveItem(at: outputURL, to: newURL)
+                    print(str)
+                } catch {
+                    print("ファイルを読み込めませんでした")
+                }
+            }
+            else if (exportSession!.status == AVAssetExportSession.Status.cancelled)
+            {
+                print("音源の書き出しがキャンセルされました")
+            }
+            else
+            {
+                print("音源書き出しのエラー :- ", exportSession!.error!.localizedDescription)
+            }
+        })
         
         if let mediaItem = mediaItemCollection.items.first {
             updateInformationUI(mediaItem: mediaItem)
@@ -117,14 +167,6 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
         present(aleart, animated: true, completion: nil)
         
 //選択した曲をディレクトリファイルに突っ込む
-        do {
-            let data:[UInt8] = ""
-            try Data(bytes: data, count: data.count).write(to: documentsPath)
-          print("書き込み成功")
-        } catch let error {
-          print(error.localizedDescription)
-          print("書き込み失敗")
-        }
     }
     
     @IBAction func cancel() {
