@@ -14,13 +14,14 @@ import MediaPlayer
 var titleArray: Array = [String]()
 var nameArray: Array = [String]()
 var songArray: Array = [String]()
+var pathArray: Array = [String]()
 
 var saveData: UserDefaults = UserDefaults.standard
 
 var selecter = MPMediaPickerController()
 
-let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-let url = documentsPath.appendingPathComponent("Select.m4a")
+//let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+//let url = documentsPath.appendingPathComponent("Select.m4a")
 
 
 
@@ -85,6 +86,8 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
         let documentURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
         let outputURL = documentURL.appendingPathComponent("\(filename_song).m4a")
         
+        print("曲のURLは\(outputURL)だよ")
+        
         do {
             try FileManager.default.removeItem(at: outputURL)
         } catch let error as NSError {
@@ -93,8 +96,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
         
         exportSession?.outputURL = outputURL
         exportSession?.exportAsynchronously(completionHandler: { () -> Void in
-            if (exportSession!.status == AVAssetExportSession.Status.completed)
-            {
+            if (exportSession!.status == AVAssetExportSession.Status.completed) {
                 print("音源のエクスポートが成功しました")
                 do {
                     let newURL = outputURL.deletingPathExtension().appendingPathExtension("mp3")
@@ -103,17 +105,17 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
                 } catch {
                     print("ファイルを読み込めませんでした")
                 }
-            }
-            else if (exportSession!.status == AVAssetExportSession.Status.cancelled)
-            {
+            } else if (exportSession!.status == AVAssetExportSession.Status.cancelled) {
                 print("音源の書き出しがキャンセルされました")
-            }
-            else
-            {
+            } else {
                 print("音源書き出しのエラー :- ", exportSession!.error!.localizedDescription)
             }
         })
         
+        var stringURL = outputURL.absoluteString
+        pathArray.append(stringURL)
+        
+
         if let mediaItem = mediaItemCollection.items.first {
             updateInformationUI(mediaItem: mediaItem)
         }
@@ -121,14 +123,6 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
     
     func mediaPickerDidCancel(_ mediaPicker: MPMediaPickerController) {
         dismiss(animated: true, completion: nil)
-    }
-    
-//URLを取得する(ここ謎)
-    func getURL() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let docsDirect = paths[0]
-        let url = docsDirect.appendingPathComponent("selected.m4a")
-        return url
     }
 
     /*
@@ -145,6 +139,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
         titleArray.append(titleField.text!)
         nameArray.append(nameField.text!)
         
+        saveData.set(pathArray, forKey: "path")
         saveData.set(titleArray, forKey: "title")
         saveData.set(nameArray, forKey: "name")
         
@@ -165,9 +160,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
                 print("OKボタンが押されました")
         }))
         present(aleart, animated: true, completion: nil)
-        
-//選択した曲をディレクトリファイルに突っ込む
-    }
+}
     
     @IBAction func cancel() {
         self.dismiss(animated: true, completion: nil)

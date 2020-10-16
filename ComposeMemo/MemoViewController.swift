@@ -30,6 +30,8 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
     
     @IBOutlet var memoTable: UITableView!
     
+    var receiveIndexPath = Int()
+    
     //この画面の操作から要素を入れられる配列
     var memoArray:Array = [String]()
     var timeArray:Array = [Timer]()
@@ -51,14 +53,24 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         memoTable.delegate = self
         memoTable.dataSource = self
-        
+                
         titleArray = saveData.object(forKey: "title") as! [String]
         nameArray = saveData.object(forKey: "name") as! [String]
-//ラベルに表示させないといけないよ
+        
+        titleLabel.text = titleArray[receiveIndexPath]
+        artistLabel.text = nameArray[receiveIndexPath]
         print("ラベルを表示しました")
+        
+        pathArray = saveData.object(forKey: "path") as! [String]
+        print("パス配列の中身は\(pathArray)だよ〜")
+        
+        var receiveURL = "\(pathArray)"
+        print("receiveURL is \(receiveURL)")
+        var openURL = receiveURL
+        print("openURL is \(openURL)")
 
 //音源をdocumentDirectoryか読み込む
         let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -87,16 +99,6 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
         
         // Do any additional setup after loading the view.
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
     @IBAction func play() {
         if playorpause == 0 {
@@ -149,7 +151,6 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
         playorpause = 0
         
 //        メモされた再生時間を取得
-
         var alertTextField: UITextField!
         memoAlert = UIAlertController(title: "メモ",message: "記録したい内容を入力してください。",preferredStyle: .alert)
         memoAlert.addTextField(configurationHandler:{
@@ -195,9 +196,18 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
         return memoCell
     }
     
-//　　　　キーボードを改行で閉じるやつ
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
+    
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+    }
+    */
 }

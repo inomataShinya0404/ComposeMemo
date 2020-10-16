@@ -17,6 +17,8 @@ import UIKit
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
 
     @IBOutlet var table: UITableView!
+        
+    var indexNum = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +31,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         navigationItem.leftBarButtonItem = editButtonItem
         
         self.table.register(UINib(nibName: "SongTableViewCell", bundle: nil), forCellReuseIdentifier: "CustomCell")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        //XibカスタムCellのLabelに持ってきた値を表示する
+        super.viewWillAppear(animated)
+        
+        if UserDefaults.standard.object(forKey: "title") != nil {
+            titleArray = saveData.object(forKey: "title") as! [String]
+            nameArray = saveData.object(forKey: "name") as! [String]
+        }
+        self.table.reloadData()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 70.0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -47,11 +64,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("cellがタップされました")
-        self.performSegue(withIdentifier: "toMemo", sender: nil)
+        tableView.deselectRow(at: indexPath, animated: true)
+        indexNum = indexPath.row
+        performSegue(withIdentifier: "toMemo", sender: nil)
     }
-  
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70.0
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any? ) {
+        let nextVC: MemoViewController = segue.destination as! MemoViewController
+        nextVC.receiveIndexPath = indexNum
     }
 
 //    cellを削除
@@ -73,18 +93,5 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //        table.isEditing = editing
 //        print(editing)
 //    }
-    
-    
-    
-    override func viewWillAppear(_ animated: Bool) {
-        //XibカスタムCellのLabelに持ってきた値を表示する
-        super.viewWillAppear(animated)
-        
-        if UserDefaults.standard.object(forKey: "title") != nil {
-            titleArray = saveData.object(forKey: "title") as! [String]
-            nameArray = saveData.object(forKey: "name") as! [String]
-        }
-        self.table.reloadData()
-    }
 }
 
