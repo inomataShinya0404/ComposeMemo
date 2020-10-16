@@ -25,6 +25,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         table.dataSource = self
         table.delegate = self
         
+        table.allowsMultipleSelectionDuringEditing = true
+        navigationItem.leftBarButtonItem = editButtonItem
+        
         self.table.register(UINib(nibName: "SongTableViewCell", bundle: nil), forCellReuseIdentifier: "CustomCell")
     }
     
@@ -51,24 +54,27 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return 70.0
     }
 
-//    cellをスライドで削除
+//    cellを削除
 //    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        self.titleArray.remove(at: indexPath.row)
-//        self.nameArray.remove(at: indexPath.row)
+//        titleArray.remove(at: indexPath.row)
+//        nameArray.remove(at: indexPath.row)
 //        tableView.deleteRows(at: [indexPath], with: .automatic)
 //    }
+//
+//    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle{
+//        if tableView.isEditing {
+//            return .delete
+//        }
+//        return .none
+//    }
     
-/*  cellを追加するメソッド
-    @IBAction func addTableViewCell() {
-        //新たに追加するセルを配列に格納する
-        let cell : SongTableViewCell = SongTableViewCell.initFromNib()
-        cell.titleLabel?.text = "\(self.cellArray.count + 1).新しい項目"
-        self.cellArray.add(cell)
-                
-        // テーブルビューをリロードする
-        self.table.reloadData()
-    }
-*/
+//    override func setEditing(_ editing: Bool, animated: Bool) {
+//        super.setEditing(editing, animated: animated)
+//        table.isEditing = editing
+//        print(editing)
+//    }
+    
+    
     
     override func viewWillAppear(_ animated: Bool) {
         //XibカスタムCellのLabelに持ってきた値を表示する

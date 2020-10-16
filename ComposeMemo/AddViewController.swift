@@ -7,8 +7,6 @@
 //
 
 //新しく曲を追加する画面
-/*
-*/
 
 import UIKit
 import MediaPlayer
@@ -23,6 +21,8 @@ var selecter = MPMediaPickerController()
 
 let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
 let url = documentsPath.appendingPathComponent("Select.m4a")
+
+
 
 class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerControllerDelegate{
 
@@ -174,7 +174,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
     }
     
     func updateInformationUI(mediaItem: MPMediaItem){
-        titleField.text = mediaItem.albumTitle
+        titleField.text = mediaItem.title
         nameField.text = mediaItem.albumArtist
         
         if let artwork = mediaItem.artwork {

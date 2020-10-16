@@ -16,8 +16,8 @@
 import UIKit
 import MediaPlayer
 
-class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerControllerDelegate {
-
+class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerControllerDelegate, UITableViewDelegate,UITableViewDataSource {
+    
     @IBOutlet var artwork: UIImageView!
     
     @IBOutlet var slider: UISlider!
@@ -34,7 +34,6 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
     var memoArray:Array = [String]()
     var timeArray:Array = [Timer]()
     
-    //MediaPlayerのインスタンスを作成
     var player: MPMusicPlayerController!
     var query: MPMediaQuery!
     
@@ -53,6 +52,9 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        memoTable.delegate = self
+        memoTable.dataSource = self
+        
         titleArray = saveData.object(forKey: "title") as! [String]
         nameArray = saveData.object(forKey: "name") as! [String]
 //ラベルに表示させないといけないよ
@@ -63,8 +65,8 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
         let url = documentPath.appendingPathComponent(" ")
         if FileManager.default.fileExists(atPath: url.path) {
             do {
-                player = try AVAudioPlayer(contentsOf: url)
-                guard let player = AVAudioPlayer else { return }
+//                player = try AVAudioPlayer(contentsOf: url)
+//                guard let player = AVAudioPlayer else { return }
                 print("読み込み成功")
             } catch {
                 print("読み込み失敗")
@@ -155,14 +157,15 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
             alertTextField?.delegate = self
         })
         memoAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+            self.memoArray.append(alertTextField!.text!)
             print("OKボタンが押されました")
         }))
         present(memoAlert, animated: true)
-        memoArray.append(alertTextField.text!)
-        saveData.set(memoArray, forKey: "memo")
         
 //        再生時間(currentTime)を配列に記録
 //        timeArray.append(currentTime!)
+        
+        saveData.set(memoArray, forKey: "memo")
         
 //        メモ欄にメモを表示する
         if saveData.object(forKey: "memo") != nil{
@@ -181,6 +184,10 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
         self.dismiss(animated: true, completion: nil)
     }
 
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return memoArray.count
+    }
+    
 //    tableViewCellにArrayの内容を表示してやる
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let memoCell = tableView.dequeueReusableCell(withIdentifier: "CustomCell") as! MemoTableViewCell
