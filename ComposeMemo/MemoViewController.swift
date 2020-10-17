@@ -75,38 +75,43 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
             
             print("パス配列の中身は\(pathArray)だよ〜")
             
-            var receiveURL = "\(pathArray)"
-//            var encodedString: String = receiveURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-//            var openURL = URL(string: encodedString)
-//            print("openURL is \(openURL)")
-//
-//            print("load \(openURL)")
-//            var audioplayer = AVAudioPlayer()
-//
-//            do {
-//                audioplayer = try AVAudioPlayer(contentsOf: openURL!)
-//                audioplayer.prepareToPlay()
-//                audioplayer.play()
-//            } catch let error as Error {
-//                audioplayer == nil
-//                print(error.localizedDescription)
-//            } catch {
-//                print("AVAudioPlayer init failed")
-//            }
-            
+            let receiveURL: String = pathArray[1]
+/*
+            var encodedString: String = receiveURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+            var openURL = URL(string: encodedString)
+            print("openURL is \(openURL)")
+
+            print("load \(openURL)")
+            var audioplayer = AVAudioPlayer()
+
+            do {
+                audioplayer = try AVAudioPlayer(contentsOf: openURL!)
+                audioplayer.prepareToPlay()
+                audioplayer.play()
+            } catch let error as Error {
+                audioplayer == nil
+                print(error.localizedDescription)
+            } catch {
+                print("AVAudioPlayer init failed")
+            }
+ */
+
+
             if let audioUrl = URL(string: receiveURL) {
                 let documentDirectoryUrl = FileManager.default.urls(for: .documentDirectory,
                                                                    in: .userDomainMask).first!
                 let destinationURL = documentDirectoryUrl.appendingPathComponent(audioUrl.lastPathComponent)
                 
                 do {
-                    self.audioplayer = try AVAudioPlayer(contentsOf: destinationURL)
-                    audioplayer.prepareToPlay()
-                    audioplayer.play()
+//                    audioplayer.stop()
+//                    audioplayer.delegate = self
+//                    self.audioplayer = try AVAudioPlayer(contentsOf: destinationURL)
+//                    audioplayer.prepareToPlay()
                 } catch let error {
                     print(error.localizedDescription)
                 }
             }
+
         }
         
 //リピートの有効化(１曲をリピート)
