@@ -36,9 +36,9 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
     var memoArray:Array = [String]()
     var timeArray:Array = [Timer]()
     
-    var audioplayer = AVAudioPlayer()
+    var audioplayer: AVAudioPlayer!
 
-    var player: MPMusicPlayerController = MPMusicPlayerController.applicationMusicPlayer
+//    var player: MPMusicPlayerController = MPMusicPlayerController.applicationMusicPlayer
     var query: MPMediaQuery!
     
     //タイマー
@@ -72,10 +72,11 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
         
         if saveData.object(forKey: "path") != nil {
             pathArray = saveData.object(forKey: "path") as! [String]
-            
             print("パス配列の中身は\(pathArray)だよ〜")
+            print(receiveIndexPath)
             
-            let receiveURL: String = "\(pathArray)"
+            let receiveURL: String = pathArray[receiveIndexPath]
+            print("\(receiveURL)")
 /*
             var encodedString: String = receiveURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
             var openURL = URL(string: encodedString)
@@ -95,26 +96,24 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
                 print("AVAudioPlayer init failed")
             }
  */
-
             if let audioUrl = URL(string: receiveURL) {
                 let documentDirectoryUrl = FileManager.default.urls(for: .documentDirectory,
                                                                    in: .userDomainMask).first!
                 let destinationURL = documentDirectoryUrl.appendingPathComponent(audioUrl.lastPathComponent)
                 
+                print(destinationURL)
                 do {
-                    audioplayer.stop()
-                    audioplayer.delegate = self
-                    self.audioplayer = try AVAudioPlayer(contentsOf: destinationURL)
+//                    audioplayer.delegate = self
+                    self.audioplayer = try AVAudioPlayer(contentsOf: audioUrl)
                     audioplayer.prepareToPlay()
+                    audioplayer.play()
                 } catch let error {
                     print(error.localizedDescription)
                 }
             }
         }
         
-//リピートの有効化(１曲をリピート)
-        player.repeatMode = .one
-//再生バーの初期化
+//        player.repeatMode = .one
         slider.value = 0.0
         
         self.memoTable.register(UINib(nibName: "MemoTableViewCell", bundle: nil), forCellReuseIdentifier: "CustomCell")
@@ -124,15 +123,21 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
     
     @IBAction func play() {
         if playorpause == 0 {
-            player.currentPlaybackTime = currentTime
-            player.play()
+//            player.currentPlaybackTime = currentTime
+//            player.play()
+            
+            audioplayer?.play()
+            
             playorpause = 1
             print("曲を再生")
             playAndPauseButton.setImage(UIImage(named: "再生ボタン.png"), for: UIControl.State())
         } else {
-            currentTime = player.currentPlaybackTime
+//            currentTime = player.currentPlaybackTime
             time.invalidate()
-            player.pause()
+//            player.pause()
+            
+            audioplayer?.stop()
+            
             playorpause = 0
             print("曲を停止")
             playAndPauseButton.setImage(UIImage(named: "一時停止ボタン.png"), for: UIControl.State())
@@ -153,12 +158,12 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
     }
     
     @objc func updateSlider(){
-        self.slider.setValue(Float(self.player.currentPlaybackTime), animated: true)
+//        self.slider.setValue(Float(self.player.currentPlaybackTime), animated: true)
     }
     
     @IBAction func sliderAction(){
-        player.currentPlaybackTime = TimeInterval(slider.value)
-        currentTime = player.currentPlaybackTime
+//        player.currentPlaybackTime = TimeInterval(slider.value)
+//        currentTime = player.currentPlaybackTime
     }
     
     @objc func updateTimeLabel() {
@@ -168,8 +173,8 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
 
     @IBAction func memo() {
         print("memoボタンが押されました")
-        currentTime = player.currentPlaybackTime
-        player.pause()
+//        currentTime = player.currentPlaybackTime
+//        player.pause()
         time.invalidate()
         playorpause = 0
         
@@ -198,9 +203,9 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
     }
     
     @IBAction func back() {
-        currentTime = player.currentPlaybackTime
+//        currentTime = player.currentPlaybackTime
         time.invalidate()
-        player.pause()
+//        player.pause()
         playorpause = 0
         print("曲を停止")
         
@@ -221,6 +226,10 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func audioPlayerDecodeErrorDidOccur(_ audioplayer: AVAudioPlayer, error: Error?) {
+            print("デコードエラー")
     }
     
     /*

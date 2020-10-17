@@ -112,7 +112,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
             }
         })
         
-        var stringURL = outputURL.absoluteString
+        let stringURL: String = outputURL.absoluteString
         print("stringURL is \(stringURL)")
         pathArray.append(stringURL)
         
@@ -133,16 +133,16 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
         saveData.set(titleArray, forKey: "title")
         saveData.set(nameArray, forKey: "name")
         
-        if selecter == nil {
-            let selectMusicAlerat = UIAlertController(title: "音源が選択されていません",
-                                                      message: "選択ボタンをタップして音源を選択してください。",
-                                                      preferredStyle: .alert)
-            selectMusicAlerat.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-                self.navigationController?.popViewController(animated: true)
-                print("選曲していません！")
-            }))
-            present(selectMusicAlerat, animated: true, completion: nil)
-        }
+//        if selecter == nil {
+//            let selectMusicAlerat = UIAlertController(title: "音源が選択されていません",
+//                                                      message: "選択ボタンをタップして音源を選択してください。",
+//                                                      preferredStyle: .alert)
+//            selectMusicAlerat.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+//                self.navigationController?.popViewController(animated: true)
+//                print("選曲していません！")
+//            }))
+//            present(selectMusicAlerat, animated: true, completion: nil)
+//        }
         
         let aleart = UIAlertController(title: "保存",message: "音源の保存が完了しました。",preferredStyle: .alert)
         aleart.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in

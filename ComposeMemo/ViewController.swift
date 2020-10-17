@@ -76,7 +76,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
 //    cellを削除
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView,
+                   commit editingStyle: UITableViewCell.EditingStyle,
+                   forRowAt indexPath: IndexPath) {
         titleArray.remove(at: indexPath.row)
         nameArray.remove(at: indexPath.row)
         pathArray.remove(at: indexPath.row)
