@@ -223,7 +223,6 @@
                         <outlet property="artworkImageView" destination="B2c-qJ-tB3" id="3Dv-2l-Q9d"/>
                         <outlet property="nameField" destination="dls-IX-gOw" id="1KZ-2g-qHT"/>
                         <outlet property="titleField" destination="KBn-ig-tMB" id="E7H-g0-QTA"/>
-                        <outlet property="titleLabel" destination="PSu-r0-oS8" id="R8i-mg-r88"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j3C-dX-BS6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

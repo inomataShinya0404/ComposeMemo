@@ -31,16 +31,12 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
     @IBOutlet var nameField: UITextField!
     
     @IBOutlet var artworkImageView: UIImageView!
-    
-    @IBOutlet var titleLabel: UILabel!
-    @IBOutlet var artistLabel: UILabel!
 
     var player: MPMusicPlayerController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let selecter = MPMediaPickerController()
         selecter.delegate = self
         selecter.allowsPickingMultipleItems = false
         present(selecter, animated: true, completion: nil)
@@ -57,10 +53,10 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
     }
     
     func mediaPicker(_ mediaPicker: MPMediaPickerController, didPickMediaItems mediaItemCollection: MPMediaItemCollection) {
-        player = MPMusicPlayerController.applicationMusicPlayer
-        player.stop()
-        player.setQueue(with: mediaItemCollection)
-        print("曲が選択されました")
+//        player = MPMusicPlayerController.applicationMusicPlayer
+//        player.stop()
+//        player.setQueue(with: mediaItemCollection)
+        print("曲が選択が完了")
         dismiss(animated: true, completion: nil)
         
         let item: MPMediaItem = mediaItemCollection.items[0]
@@ -69,21 +65,25 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
             return
         }
         
-        let song_title = item.value(forProperty: MPMediaItemPropertyTitle) as! String
-        let filename_song = song_title.replacingOccurrences(of: " ", with: "_")
-        
         let string = pathURL!.absoluteString
         let string2 = string.replacingOccurrences(of: "ipod-library://item/item", with: "")
         let arr = string2.components(separatedBy: "?")
         var mimeType = arr[0]
         mimeType = mimeType.replacingOccurrences( of: ".", with: "")
         
-        let exportSession = AVAssetExportSession(asset: AVAsset(url: pathURL!), presetName: AVAssetExportPresetAppleM4A)
+        let exportSession = AVAssetExportSession(asset: AVAsset(url: pathURL!),
+                                                 presetName: AVAssetExportPresetAppleM4A)
         exportSession?.shouldOptimizeForNetworkUse = true
         exportSession?.outputFileType = AVFileType.m4a
         exportSession?.metadata = AVAsset(url: pathURL!).metadata
         
-        let documentURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        let song_title = item.value(forProperty: MPMediaItemPropertyTitle) as! String
+        let filename_song = song_title.replacingOccurrences(of: " ", with: "_")
+        
+        let documentURL = try! FileManager.default.url(for: .documentDirectory,
+                                                       in: .userDomainMask,
+                                                       appropriateFor: nil,
+                                                       create: true)
         let outputURL = documentURL.appendingPathComponent("\(filename_song).m4a")
         
         print("曲のURLは\(outputURL)だよ")
@@ -113,9 +113,9 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
         })
         
         var stringURL = outputURL.absoluteString
+        print("stringURL is \(stringURL)")
         pathArray.append(stringURL)
         
-
         if let mediaItem = mediaItemCollection.items.first {
             updateInformationUI(mediaItem: mediaItem)
         }
@@ -124,16 +124,6 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
     func mediaPickerDidCancel(_ mediaPicker: MPMediaPickerController) {
         dismiss(animated: true, completion: nil)
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
     @IBAction func saveButton() {
         titleArray.append(titleField.text!)
@@ -171,11 +161,11 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
         nameField.text = mediaItem.albumArtist
         
         if let artwork = mediaItem.artwork {
-                let image = artwork.image(at: artworkImageView.bounds.size)
-                artworkImageView.image = image
+            let image = artwork.image(at: artworkImageView.bounds.size)
+            artworkImageView.image = image
         } else {
-                artworkImageView.image = nil
-                artworkImageView.backgroundColor = UIColor.gray
+            artworkImageView.image = nil
+            artworkImageView.backgroundColor = UIColor.gray
         }
     }
     
@@ -183,4 +173,14 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
         textField.resignFirstResponder()
         return true
     }
+    
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+    }
+    */
 }

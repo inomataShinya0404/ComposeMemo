@@ -10,13 +10,13 @@
 /*
  【タスク】
  ・音源をiPhoneのDocumentDirectlyから読み込む
- ・Memoボタンが押されたらTextField付きのアラートが出てくる
  */
 
 import UIKit
 import MediaPlayer
+import AVFoundation
 
-class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerControllerDelegate, UITableViewDelegate,UITableViewDataSource {
+class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerControllerDelegate, UITableViewDelegate,UITableViewDataSource,AVAudioPlayerDelegate{
     
     @IBOutlet var artwork: UIImageView!
     
@@ -36,7 +36,9 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
     var memoArray:Array = [String]()
     var timeArray:Array = [Timer]()
     
-    var player: MPMusicPlayerController!
+    var audioplayer = AVAudioPlayer()
+
+    var player: MPMusicPlayerController = MPMusicPlayerController.applicationMusicPlayer
     var query: MPMediaQuery!
     
     //タイマー
@@ -57,39 +59,56 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
         memoTable.delegate = self
         memoTable.dataSource = self
                 
-        titleArray = saveData.object(forKey: "title") as! [String]
-        nameArray = saveData.object(forKey: "name") as! [String]
-        
-        titleLabel.text = titleArray[receiveIndexPath]
-        artistLabel.text = nameArray[receiveIndexPath]
-        print("ラベルを表示しました")
-        
-        pathArray = saveData.object(forKey: "path") as! [String]
-        print("パス配列の中身は\(pathArray)だよ〜")
-        
-        var receiveURL = "\(pathArray)"
-        print("receiveURL is \(receiveURL)")
-        var openURL = receiveURL
-        print("openURL is \(openURL)")
-
-//音源をdocumentDirectoryか読み込む
-        let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let url = documentPath.appendingPathComponent(" ")
-        if FileManager.default.fileExists(atPath: url.path) {
-            do {
-//                player = try AVAudioPlayer(contentsOf: url)
-//                guard let player = AVAudioPlayer else { return }
-                print("読み込み成功")
-            } catch {
-                print("読み込み失敗")
-            }
-        } else {
-            print("file not found")
+        if UserDefaults.standard.object(forKey: "title") != nil {
+            titleArray = saveData.object(forKey: "title") as! [String]
+            titleLabel.text = titleArray[receiveIndexPath]
         }
         
-        player = MPMusicPlayerController.applicationMusicPlayer
-        query = MPMediaQuery.songs()
-        player.setQueue(with: query)
+        if UserDefaults.standard.object(forKey: "name") != nil {
+            nameArray = saveData.object(forKey: "name") as! [String]
+            artistLabel.text = nameArray[receiveIndexPath]
+        }
+        print("ラベルを表示しました")
+        
+        if saveData.object(forKey: "path") != nil {
+            pathArray = saveData.object(forKey: "path") as! [String]
+            
+            print("パス配列の中身は\(pathArray)だよ〜")
+            
+            var receiveURL = "\(pathArray)"
+//            var encodedString: String = receiveURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+//            var openURL = URL(string: encodedString)
+//            print("openURL is \(openURL)")
+//
+//            print("load \(openURL)")
+//            var audioplayer = AVAudioPlayer()
+//
+//            do {
+//                audioplayer = try AVAudioPlayer(contentsOf: openURL!)
+//                audioplayer.prepareToPlay()
+//                audioplayer.play()
+//            } catch let error as Error {
+//                audioplayer == nil
+//                print(error.localizedDescription)
+//            } catch {
+//                print("AVAudioPlayer init failed")
+//            }
+            
+            if let audioUrl = URL(string: receiveURL) {
+                let documentDirectoryUrl = FileManager.default.urls(for: .documentDirectory,
+                                                                   in: .userDomainMask).first!
+                let destinationURL = documentDirectoryUrl.appendingPathComponent(audioUrl.lastPathComponent)
+                
+                do {
+                    self.audioplayer = try AVAudioPlayer(contentsOf: destinationURL)
+                    audioplayer.prepareToPlay()
+                    audioplayer.play()
+                } catch let error {
+                    print(error.localizedDescription)
+                }
+            }
+        }
+        
 //リピートの有効化(１曲をリピート)
         player.repeatMode = .one
 //再生バーの初期化
@@ -145,6 +164,7 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
     }
 
     @IBAction func memo() {
+        print("memoボタンが押されました")
         currentTime = player.currentPlaybackTime
         player.pause()
         time.invalidate()
@@ -158,7 +178,7 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
             alertTextField?.delegate = self
         })
         memoAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-            self.memoArray.append(alertTextField!.text!)
+            self.memoArray.append(alertTextField.text!)
             print("OKボタンが押されました")
         }))
         present(memoAlert, animated: true)
@@ -168,9 +188,8 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
         
         saveData.set(memoArray, forKey: "memo")
         
-//        メモ欄にメモを表示する
         if saveData.object(forKey: "memo") != nil{
-            
+        
         }
         memoTable.reloadData()
     }
