@@ -75,7 +75,7 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
             
             print("パス配列の中身は\(pathArray)だよ〜")
             
-            let receiveURL: String = pathArray[1]
+            let receiveURL: String = "\(pathArray)"
 /*
             var encodedString: String = receiveURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
             var openURL = URL(string: encodedString)
@@ -96,22 +96,20 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
             }
  */
 
-
             if let audioUrl = URL(string: receiveURL) {
                 let documentDirectoryUrl = FileManager.default.urls(for: .documentDirectory,
                                                                    in: .userDomainMask).first!
                 let destinationURL = documentDirectoryUrl.appendingPathComponent(audioUrl.lastPathComponent)
                 
                 do {
-//                    audioplayer.stop()
-//                    audioplayer.delegate = self
-//                    self.audioplayer = try AVAudioPlayer(contentsOf: destinationURL)
-//                    audioplayer.prepareToPlay()
+                    audioplayer.stop()
+                    audioplayer.delegate = self
+                    self.audioplayer = try AVAudioPlayer(contentsOf: destinationURL)
+                    audioplayer.prepareToPlay()
                 } catch let error {
                     print(error.localizedDescription)
                 }
             }
-
         }
         
 //リピートの有効化(１曲をリピート)
