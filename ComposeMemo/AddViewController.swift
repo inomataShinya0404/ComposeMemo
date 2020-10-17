@@ -53,9 +53,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
     }
     
     func mediaPicker(_ mediaPicker: MPMediaPickerController, didPickMediaItems mediaItemCollection: MPMediaItemCollection) {
-//        player = MPMusicPlayerController.applicationMusicPlayer
-//        player.stop()
-//        player.setQueue(with: mediaItemCollection)
+
         print("曲が選択が完了")
         dismiss(animated: true, completion: nil)
         
@@ -80,6 +78,10 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
         let song_title = item.value(forProperty: MPMediaItemPropertyTitle) as! String
         let filename_song = song_title.replacingOccurrences(of: " ", with: "_")
         
+//        print(filename_song)
+//        pathArray.append(filename_song)
+//        saveData.object(forKey: "path")
+        
         let documentURL = try! FileManager.default.url(for: .documentDirectory,
                                                        in: .userDomainMask,
                                                        appropriateFor: nil,
@@ -102,6 +104,10 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
                     let newURL = outputURL.deletingPathExtension().appendingPathExtension("mp3")
                     let str = try FileManager.default.moveItem(at: outputURL, to: newURL)
                     print(str)
+                    
+                    let stringURL: String = newURL.absoluteString
+                    print("stringURL is \(stringURL)")
+                    pathArray.append(stringURL)
                 } catch {
                     print("ファイルを読み込めませんでした")
                 }
@@ -111,10 +117,6 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
                 print("音源書き出しのエラー :- ", exportSession!.error!.localizedDescription)
             }
         })
-        
-        let stringURL: String = outputURL.absoluteString
-        print("stringURL is \(stringURL)")
-        pathArray.append(stringURL)
         
         if let mediaItem = mediaItemCollection.items.first {
             updateInformationUI(mediaItem: mediaItem)
@@ -147,7 +149,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, MPMediaPickerCon
         let aleart = UIAlertController(title: "保存",message: "音源の保存が完了しました。",preferredStyle: .alert)
         aleart.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
                 self.navigationController?.popViewController(animated: true)
-                print("OKボタンが押されました")
+                print("SaveアラートのOKボタンが押されました")
         }))
         present(aleart, animated: true, completion: nil)
 }

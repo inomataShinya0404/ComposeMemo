@@ -76,41 +76,35 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
             print(receiveIndexPath)
             
             let receiveURL: String = pathArray[receiveIndexPath]
-            print("\(receiveURL)")
-/*
-            var encodedString: String = receiveURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-            var openURL = URL(string: encodedString)
-            print("openURL is \(openURL)")
+            print("receiveURLの確認：\(receiveURL)")
 
-            print("load \(openURL)")
-            var audioplayer = AVAudioPlayer()
-
-            do {
-                audioplayer = try AVAudioPlayer(contentsOf: openURL!)
-                audioplayer.prepareToPlay()
-                audioplayer.play()
-            } catch let error as Error {
-                audioplayer == nil
-                print(error.localizedDescription)
-            } catch {
-                print("AVAudioPlayer init failed")
-            }
- */
+            print("ifのそと\(URL(string: receiveURL))")
             if let audioUrl = URL(string: receiveURL) {
+                print("ifのなか\(URL(string: receiveURL))")
                 let documentDirectoryUrl = FileManager.default.urls(for: .documentDirectory,
                                                                    in: .userDomainMask).first!
                 let destinationURL = documentDirectoryUrl.appendingPathComponent(audioUrl.lastPathComponent)
                 
                 print(destinationURL)
+                print("doのそと")
                 do {
-//                    audioplayer.delegate = self
-                    self.audioplayer = try AVAudioPlayer(contentsOf: audioUrl)
+                    print("doのなか")
+                    audioplayer = try AVAudioPlayer(contentsOf: destinationURL)
+                    print("いち :\(String(describing: audioplayer))")
+                    audioplayer.delegate = self
+//                    print("に :\(String(describing: audioplayer))")
                     audioplayer.prepareToPlay()
+//                    print("さん :\(String(describing: audioplayer))")
                     audioplayer.play()
+//                    print("よん :\(String(describing: audioplayer))")
+
                 } catch let error {
+                    print("catchの中")
                     print(error.localizedDescription)
                 }
+//                audioplayer = try! AVAudioPlayer(contentsOf: destinationURL)
             }
+            print("ifの後")
         }
         
 //        player.repeatMode = .one
@@ -126,6 +120,7 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
 //            player.currentPlaybackTime = currentTime
 //            player.play()
             
+            audioplayer?.prepareToPlay()
             audioplayer?.play()
             
             playorpause = 1
@@ -136,7 +131,7 @@ class MemoViewController: UIViewController,UITextFieldDelegate,MPMediaPickerCont
             time.invalidate()
 //            player.pause()
             
-            audioplayer?.stop()
+            audioplayer.stop()
             
             playorpause = 0
             print("曲を停止")
